@@ -1,0 +1,72 @@
+{
+  "version": "0.1.0",
+  "name": "streamer_donations",
+  "instructions": [
+    {
+      "name": "initializeStreamer",
+      "accounts": [
+        { "name": "streamerAccount", "isMut": true, "isSigner": true },
+        { "name": "owner", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": []
+    },
+    {
+      "name": "sendDonation",
+      "accounts": [
+        { "name": "donationAccount", "isMut": true, "isSigner": true },
+        { "name": "streamerAccount", "isMut": true, "isSigner": false },
+        { "name": "streamer", "isMut": true, "isSigner": false },
+        { "name": "donor", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "message", "type": "string" },
+        { "name": "amount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "markAsRead",
+      "accounts": [
+        { "name": "donationAccount", "isMut": true, "isSigner": false },
+        { "name": "streamerAccount", "isMut": false, "isSigner": false },
+        { "name": "owner", "isMut": false, "isSigner": true }
+      ],
+      "args": [{ "name": "donationId", "type": "publicKey" }]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "StreamerAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "owner", "type": "publicKey" },
+          { "name": "totalDonations", "type": "u64" }
+        ]
+      }
+    },
+    {
+      "name": "Donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "donor", "type": "publicKey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "message", "type": "string" },
+          { "name": "timestamp", "type": "i64" },
+          { "name": "read", "type": "bool" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidAmount",
+      "msg": "Donation amount must be greater than 0"
+    },
+    { "code": 6001, "name": "MessageTooLong", "msg": "Message is too long" },
+    { "code": 6002, "name": "UnauthorizedAccess", "msg": "Unauthorized access" }
+  ]
+}
